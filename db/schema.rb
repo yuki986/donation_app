@@ -13,13 +13,24 @@
 ActiveRecord::Schema.define(version: 2021_02_01_075759) do
 
   create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "postal_code", default: "", null: false
+    t.integer "prefecture", null: false
+    t.string "city", default: ""
+    t.string "house_number", default: ""
+    t.string "building_name", default: ""
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
   create_table "donations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "price", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["price"], name: "index_donations_on_price"
+    t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -30,4 +41,6 @@ ActiveRecord::Schema.define(version: 2021_02_01_075759) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "addresses", "users"
+  add_foreign_key "donations", "users"
 end

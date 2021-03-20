@@ -1,7 +1,9 @@
 class UserDonation
   include ActiveModel::Model
+  # ストロングパラメーターからの情報を受取る
   attr_accessor :name, :name_reading, :nickname, :postal_code, :prefecture, :city, :house_number, :building_name, :price
 
+  # 各カラムに対してのバリデーションを指定
   with_options presence: true do
     validates :name, format: {
       with: /\A[ぁ-んァ-ン一-龥々]/, message: "is invalid. Input full-width characters."
@@ -22,6 +24,7 @@ class UserDonation
   validates :prefecture, numericality: { other_than: 0, message: "can't be blank" }
   validates :price, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 1000000, message: "is out of setting range" }
 
+  # それぞれのモデルのデータを保存している。
   def save
     user = User.create(name: name, name_reading: name_reading, nickname: nickname)
     Address.create(postal_code: postal_code, prefecture: prefecture, city: city,    house_number: house_number, building_name: building_name,user_id: user.id)
